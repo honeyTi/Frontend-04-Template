@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地图编辑器</title>
+    <style>
+        .cell{
+            display: block;
+            float: left;
+            width: 6px;
+            height: 6px;
+            box-sizing: border-box;
+            line-height: 6px;
+            background: #cccccc;
+            border-right: 1px solid #ffffff;
+            border-bottom: 1px solid #ffffff;
+        }
+        .cell.back {
+            background: #333333;
+        }
+        .cell.path {
+            background: #49fd49;
+        }
+        #map {
+            width: 600px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map">
+
+    </div>
+    <button id="save">保存</button>
+
+    <script src="./main.js"></script>
+</body>
+</html>
