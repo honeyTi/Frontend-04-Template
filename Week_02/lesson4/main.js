@@ -1,4 +1,4 @@
-+function () {
++function(){
     // 设置数据
     let mapJson = localStorage["map"] ? JSON.parse(localStorage['map']) : Array(10000).fill(0);
     // 鼠标的状态
@@ -9,6 +9,8 @@
     let mapBox = document.getElementById('map');
     // 路径栈空间
     let queue = [];
+    // 复制数据
+    let table;
     // 初始化执行
     _init();
     function _init() {
@@ -83,40 +85,53 @@
     // 计算路径
     async function path(start, end) {
         queue = [start];
+        table = Object.create(mapJson);
         while(queue.length) {
             let [x, y] = queue.shift();
-            console.log(queue);
-            console.log(x, y);
             if (x === end[0] && y === end[1]) {
+                console.log(table, x, y);
+                let pathList = [];
+                while(x !== start[0] || y !== start[1]) {
+                    pathList.push(mapJson[x * 100 + y]);
+                    [x, y] = table[100 * x + y];
+                    await sleep(20);
+                    mapBox.children[100 * x + y].classList.add('red');
+                }
                 return true;
             }
-            await insert(x, y - 1 , mapJson);
-            await insert(x, y + 1, mapJson);
-            await insert(x + 1, y, mapJson);
-            await insert(x - 1, y, mapJson)
+            await insert(x, y - 1, [x, y]);
+            await insert(x, y + 1, [x, y]);
+            await insert(x + 1, y, [x, y]);
+            await insert(x - 1, y, [x, y]);
+
+            // 斜角方向
+            await insert(x - 1, y - 1, [x, y]);
+            await insert(x + 1, y + 1, [x, y]);
+            await insert(x + 1, y - 1, [x, y]);
+            await insert(x - 1, y + 1, [x, y]);
         }
+        return null;
     }
     // 插入数据队列数据
-    async function insert(x, y, map) {
+    function insert(x, y, pre) {
         if (x < 0 || x >= 100 || y < 0 || y >= 100) {
             return;
-        } else if (map[100 * x + y]) {
+        } else if (mapJson[100 * x + y]) {
             return;
         }
-        await sleep(100);
         mapBox.children[100 * x + y].classList.add('path');
-        map[100 * x + y] = 2;
+        mapJson[100 * x + y] = 2;
+        table[100 * x + y] = pre;
         queue.push([x, y]);
         
     }
 
     // sleep函数
-
     function sleep(t) {
         return new Promise((resolve, reject) => {
             setTimeout(resolve, t);
         })
     }
 
-    path([0, 0], [5, 5]);
+    path([0, 0], [50, 50]);
 }()
