@@ -1,0 +1,31 @@
+<!-- 1 + 2 * 3 -->
+<Mul>::=<Number>|
+    <Mul>"*"<Number>|
+    <Mul>"/"<Number>|
+<Add>::=<Mul>|
+    <Add>"+"<Mul>|
+    <Add>"-"<Mul>|
+
+<!-- 四则运算方法BNF -->
+<!-- 1-(2 + 3); -->
+
+<!-- 终结符 -->
+<Number>
+ + - * /
+
+<!-- 非终结符 -->
+<BracketL> 括号
+<BracketR>
+<Mul>
+
+
+<Mul>::=<Number>|
+    <Mul>"*"<Number>|
+    <Mul>"/"<Number>|
+
+<Bracket>::= <Mul>|
+    "("<Add>")"|
+
+<Add>::= <Bracket>|
+    <Add>"+"<Bracket>|
+    <Add>"-"<Bracket>|
